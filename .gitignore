@@ -1,0 +1,13 @@
+# Build output
+Debug/
+Release/
+*.elf
+*.map
+*.list
+*.o
+*.d
+*.su
+
+# OS junk
+.DS_Store
+Thumbs.db
