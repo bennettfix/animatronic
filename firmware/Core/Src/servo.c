@@ -88,6 +88,19 @@ uint8_t servo_is_moving(uint8_t ch){
 	return servos[ch].frame < servos[ch].frames_total;
 }
 
+void servo_tick(void) {
+	for (uint8_t i=0; i < NUM_SERVOS; i++) {
+		volatile Servo *s = &servos[i];
+
+		if (s->frame < s->frames_total){
+			s->frame++;
+			float p = min_jerk((float)s->frame / s->frames_total);
+			int32_t delta = (int32_t)s->target_us - (int32_t)s->start_us;
+			s->current_us = (uint16_t)(s->start_us + (int32_t)(p * delta));
+		}
+
+		*ccr[i] = s->current_us;
+	}
 
 
-
+}
