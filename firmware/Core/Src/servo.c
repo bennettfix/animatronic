@@ -32,4 +32,17 @@ void servo_set_us(uint8_t ch, uint16_t us) {
 	if (us > SERVO_MAX_US) us = SERVO_MAX_US;
 
 	*ccr[ch] = us;
-}
+
+#define FRAME_US 20
+
+typedef struct {
+	uint16_t start_us;
+	uint16_t target_us;
+	uint16_t current_us;
+	uint16_t frame;
+	uint16_t frames_total;
+} Servo;
+
+static volatile Servo servos[NUM_SERVOS];
+};
+
