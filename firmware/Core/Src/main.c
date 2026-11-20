@@ -93,7 +93,6 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
   servo_init();
-  servo_set_us(0, 1700);
   /* USER CODE END 2 */
 
   /* Initialize leds */
@@ -141,6 +140,11 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    static uint8_t toggle = 0;
+    if (!servo_is_moving(0)) {
+    	servo_move(0, toggle ? 1000 : 2000, 1000);
+    	toggle = !toggle;
+    }
   }
   /* USER CODE END 3 */
 }
@@ -192,7 +196,11 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+	if (htim->Instance == TIM3) {
+		servo_tick();
+	}
+}
 /* USER CODE END 4 */
 
 /**
